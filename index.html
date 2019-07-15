@@ -14,6 +14,9 @@
     <script>
         if(navigator.bluetooth) {
             document.querySelector('#result').textContent = "yes" ;
+            navigator.bluetooth.requestDevice().then( (device) => {
+                document.querySelector('#result').innerHTML += `<br> device.name <br>`
+            })
         }
     </script>
     
