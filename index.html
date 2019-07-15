@@ -7,8 +7,15 @@
     <title>bluetooth</title>
 </head>
 <body>
+    <div id="result"></div>
 
     hello bluetooth!!
+
+    <script>
+        if(navigator.bluetooth) {
+            document.querySelector('#result').textContent = "yes" ;
+        }
+    </script>
     
 </body>
 </html>
