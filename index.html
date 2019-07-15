@@ -1,24 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>bluetooth</title>
 </head>
+
 <body>
     <div id="result"></div>
 
     hello bluetooth!!
 
     <script>
-        if(navigator.bluetooth) {
-            document.querySelector('#result').textContent = "yes" ;
-            navigator.bluetooth.requestDevice().then( (device) => {
-                document.querySelector('#result').innerHTML += `<br> device.name <br>`
+        if (navigator.bluetooth) {
+            document.querySelector('#result').textContent = "yes";
+
+
+            navigator.bluetooth.requestDevice({
+                filters: [{
+                    services: ['battery_service']
+                }]
             })
+                .then(function (device) {
+                    return device.gatt.connect();
+                })
+                .then(function (server) {
+                    return server.getPrimaryService('battery_service');
+                })
+                .then(function (service) {
+                    return service.getCharacteristic('battery_level');
+                })
+                .then(function (characteristic) {
+                    return characteristic.readValue();
+                })
+                .then(function (value) {
+                    document.querySelector('#result').textContent += 'd' + value.getUint8(0);
+                })
+                .catch(function (error) {
+                    $target.innerText = error;
+                });
         }
     </script>
-    
+
 </body>
+
 </html>
